@@ -2,7 +2,7 @@
 
 Проект «Календарь звонков» (Call Calendar) — учебный проект Hexlet (Design First). Упрощённый аналог Cal.com: владелец публикует типы событий, гость выбирает свободный 30-минутный слот и записывается на звонок.
 
-Стек: **Laravel 12 (PHP 8.3) API-only + Vue 3 SPA (Vite) + Tailwind 4 + MySQL**. Финальный деплой — Docker (Dockerfile + docker-compose). Локальная разработка — Windows/OSPanel (PHP 8.3, MySQL). Русский используется в комментариях, коммитах и аннотациях — придерживайся этого стиля.
+Стек: **Laravel 13 (PHP 8.3) API-only + Vue 3 SPA (Vite) + Tailwind 4 + MySQL**. Финальный деплой — Docker (Dockerfile + docker-compose). Локальная разработка — Windows/OSPanel (PHP 8.3, MySQL). Русский используется в комментариях, коммитах и аннотациях — придерживайся этого стиля.
 
 ## Структура (monorepo)
 
@@ -11,7 +11,7 @@
 ├── AGENTS.md
 ├── .opencode/skills/     # скиллы: vue-spa, laravel-api, laravel-security, laravel-testing
 ├── spec/                 # TypeSpec API-контракт → spec/openapi.yaml (единый источник правды)
-├── backend/              # Laravel 12 (JSON API, без веб-страниц)
+├── backend/              # Laravel 13 (JSON API, без веб-страниц)
 ├── frontend/             # Vue 3 + Vite + Tailwind (SPA, отдельное приложение)
 ├── docker/               # Dockerfile'ы
 ├── docker-compose.yml
