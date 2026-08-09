@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { eventTypesApi } from '@/api/eventTypes'
 import { useForm } from '@/composables/useForm'
 
-const form = useForm({ title: '', description: '', durationMinutes: 30 })
+const { data: formData, errors: formErrors } = useForm({ title: '', description: '', durationMinutes: 30 })
 const success = ref(null)
 const serverError = ref(null)
 
@@ -12,15 +12,15 @@ async function submit() {
     serverError.value = null
     try {
         const created = await eventTypesApi.create({
-            title: form.data.title,
-            description: form.data.description,
-            durationMinutes: Number(form.data.durationMinutes),
+            title: formData.title,
+            description: formData.description,
+            durationMinutes: Number(formData.durationMinutes),
         })
         success.value = `Тип «${created.title}» создан.`
-        form.data.title = ''
-        form.data.description = ''
+        formData.title = ''
+        formData.description = ''
     } catch (e) {
-        if (e.status === 422) form.errors.value = e.errors || {}
+        if (e.status === 422) formErrors.value = e.errors || {}
         else serverError.value = e.message
     }
 }
@@ -30,28 +30,28 @@ async function submit() {
     <div class="max-w-lg">
         <h1 class="text-2xl font-bold mb-6">Создать тип звонка</h1>
 
-        <form @submit.prevent="submit" class="bg-white border border-slate-200 rounded-xl p-5 grid gap-4">
+        <form @submit.prevent="submit" novalidate class="bg-white border border-slate-200 rounded-xl p-5 grid gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1" for="title">Название</label>
-                <input id="title" v-model="form.data.title" name="title" type="text" required
+                <input id="title" v-model="formData.title" name="title" type="text" required
                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                <p v-if="form.errors.title" class="text-sm text-red-600 mt-1">{{ form.errors.title[0] }}</p>
+                <p v-if="formErrors.title" class="text-sm text-red-600 mt-1">{{ formErrors.title[0] }}</p>
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1" for="description">Описание</label>
-                <textarea id="description" v-model="form.data.description" name="description" rows="2"
+                <textarea id="description" v-model="formData.description" name="description" rows="2"
                           class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1" for="durationMinutes">Длительность, мин</label>
-                <select id="durationMinutes" v-model="form.data.durationMinutes" name="durationMinutes"
+                <select id="durationMinutes" v-model="formData.durationMinutes" name="durationMinutes"
                         class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option :value="30">30</option>
                     <option :value="60">60</option>
                     <option :value="90">90</option>
                     <option :value="120">120</option>
                 </select>
-                <p v-if="form.errors.durationMinutes" class="text-sm text-red-600 mt-1">{{ form.errors.durationMinutes[0] }}</p>
+                <p v-if="formErrors.durationMinutes" class="text-sm text-red-600 mt-1">{{ formErrors.durationMinutes[0] }}</p>
             </div>
 
             <p v-if="success" class="text-sm text-emerald-600">{{ success }}</p>

@@ -12,7 +12,7 @@ const router = useRouter()
 const eventType = ref(null)
 const selectedDate = ref(todayIso())
 const selectedSlot = ref(null)
-const form = useForm({ guestName: '', guestEmail: '' })
+const { data: formData, errors: formErrors, processing: formProcessing } = useForm({ guestName: '', guestEmail: '' })
 const submitError = ref(null)
 const submitting = ref(false)
 
@@ -64,13 +64,13 @@ async function book() {
         await bookingsApi.create({
             eventTypeId: eventType.value.id,
             start: selectedSlot.value.start,
-            guestName: form.data.guestName,
-            guestEmail: form.data.guestEmail,
+            guestName: formData.guestName,
+            guestEmail: formData.guestEmail,
         })
         router.push({
             path: '/success',
             query: {
-                guestName: form.data.guestName,
+                guestName: formData.guestName,
                 title: eventType.value.title,
                 start: selectedSlot.value.start,
             },
@@ -78,10 +78,10 @@ async function book() {
     } catch (e) {
         if (e.status === 409) {
             submitError.value = 'Этот слот только что заняли. Пожалуйста, выберите другое время.'
-            form.errors.value = {}
+            formErrors.value = {}
             await load(selectedDate.value)
         } else {
-            form.errors.value = e.errors || {}
+            formErrors.value = e.errors || {}
             submitError.value = e.message
         }
     } finally {
@@ -138,23 +138,23 @@ onMounted(async () => {
                 </h2>
                 <p class="text-slate-500 text-sm mb-4">{{ eventType.durationMinutes }} минут</p>
 
-                <form @submit.prevent="book" class="grid gap-4">
+                <form @submit.prevent="book" novalidate class="grid gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1" for="guest_name">Ваше имя</label>
-                        <input id="guest_name" v-model="form.data.guestName" name="guest_name" type="text" required
+                        <input id="guest_name" v-model="formData.guestName" name="guest_name" type="text" required
                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                        <p v-if="form.errors.guestName" class="text-sm text-red-600 mt-1">{{ form.errors.guestName[0] }}</p>
+                        <p v-if="formErrors.guestName" class="text-sm text-red-600 mt-1">{{ formErrors.guestName[0] }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1" for="guest_email">Email</label>
-                        <input id="guest_email" v-model="form.data.guestEmail" name="guest_email" type="email" required
+                        <input id="guest_email" v-model="formData.guestEmail" name="guest_email" type="email" required
                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                        <p v-if="form.errors.guestEmail" class="text-sm text-red-600 mt-1">{{ form.errors.guestEmail[0] }}</p>
+                        <p v-if="formErrors.guestEmail" class="text-sm text-red-600 mt-1">{{ formErrors.guestEmail[0] }}</p>
                     </div>
 
                     <p v-if="submitError" class="text-sm text-red-600">{{ submitError }}</p>
 
-                    <button type="submit" data-testid="book-submit" :disabled="submitting"
+                    <button type="submit" data-testid="book-submit" :disabled="submitting || formProcessing"
                             class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
                         {{ submitting ? 'Записываем…' : 'Записаться' }}
                     </button>
