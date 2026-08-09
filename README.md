@@ -32,7 +32,7 @@ docker compose up --build
 
 - Приложение (SPA): http://localhost:8080
 - API (прямой доступ): http://localhost:8000/api/event-types
-- Миграции применяются автоматически при старте backend.
+- Миграции применяются автоматически при старте backend (entrypoint ждёт готовности MySQL).
 
 ## Локальная разработка
 
