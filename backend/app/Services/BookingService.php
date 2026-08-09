@@ -6,7 +6,7 @@ use App\Exceptions\BookingConflictException;
 use App\Models\Booking;
 use App\Models\EventType;
 use Carbon\CarbonImmutable;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -38,13 +38,9 @@ class BookingService
                 'guest_name' => $validated['guestName'],
                 'guest_email' => $validated['guestEmail'],
             ]));
-        } catch (QueryException $e) {
-            // Защита от гонки: unique-индекс на bookings.start
-            if ((int) $e->errorInfo[1] === 1062) {
-                throw new BookingConflictException('Слот уже занят.');
-            }
-
-            throw $e;
+        } catch (UniqueConstraintViolationException $e) {
+            // Защита от гонки: unique-индекс на bookings.start (MySQL и SQLite)
+            throw new BookingConflictException('Слот уже занят.');
         }
     }
 

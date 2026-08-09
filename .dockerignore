@@ -9,6 +9,9 @@ backend/node_modules
 backend/storage/logs/*.log
 backend/tests
 backend/database/database.sqlite
+backend/.env
+backend/.env.testing
+backend/.env.dusk.local
 
 frontend/node_modules
 frontend/dist
