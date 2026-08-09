@@ -80,6 +80,8 @@
 
 ## Деплой (Docker)
 
-- `docker/Dockerfile` (backend: php-fpm + nginx) и `docker/Dockerfile.frontend` (nginx, раздаёт собранный SPA, проксирует `/api` → backend).
+- **Корневой `Dockerfile`** — единый самодостаточный образ (SPA + API), слушает порт из env `PORT` (дефолт 8000), БД — SQLite в контейнере. Используется hexlet-проверкой (`docker build -t calendar-slot-code:local -f Dockerfile .`) и деплоем на Railway.
+- `docker/Dockerfile` (backend: php-fpm + nginx) и `docker/Dockerfile.frontend` (nginx, раздаёт собранный SPA, проксирует `/api` → backend) — для локального docker-compose.
 - `docker-compose.yml`: backend, frontend/nginx, mysql. Миграции — при старте (entrypoint).
-- Проверка: `docker compose up --build`, затем руками прогнать пользовательские сценарии.
+- **Деплой на Railway:** публичная ссылка — `https://call-calendar-production.up.railway.app` (см. README). SQLite в контейнере, данные сбрасываются при пересборке (не использовать Railway Volume для SQLite — сетевой volume ломает блокировки SQLite → 500).
+- Проверка: `docker compose up --build` (локально), либо `docker build -f Dockerfile .` + запуск с `-e PORT`.
