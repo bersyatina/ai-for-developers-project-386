@@ -13,8 +13,8 @@ ENV APP_ENV=production \
     DB_PASSWORD=secret
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends nginx \
-    && docker-php-ext-install pdo_mysql \
+    && apt-get install -y --no-install-recommends nginx unzip libzip-dev \
+    && docker-php-ext-install pdo_mysql zip \
     && docker-php-ext-enable opcache \
     && rm -rf /var/lib/apt/lists/*
 
