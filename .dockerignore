@@ -1,0 +1,16 @@
+.git
+.github
+.idea
+.vscode
+**/.gitignore
+
+backend/vendor
+backend/node_modules
+backend/storage/logs/*.log
+backend/tests
+backend/database/database.sqlite
+
+frontend/node_modules
+frontend/dist
+
+spec/node_modules
