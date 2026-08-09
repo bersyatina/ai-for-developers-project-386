@@ -7,10 +7,19 @@
 
 ## Стек
 
-- **Backend:** Laravel 13 (PHP 8.3), JSON API, MySQL
+- **Backend:** Laravel 13 (PHP 8.3), JSON API, MySQL (локально) / SQLite (в контейнере)
 - **Frontend:** Vue 3 + Vite + Tailwind 4 (отдельный SPA)
 - **Контракт:** TypeSpec → `spec/openapi.yaml` (единый источник правды)
-- **Деплой:** Docker (docker-compose: backend, frontend/nginx, mysql)
+- **Деплой:** Docker (корневой `Dockerfile` — единый образ SPA+API, запуск по `PORT`), Railway
+
+## Деплой (публичное приложение)
+
+Приложение развёрнуто на Railway (единый Docker-образ из корневого `Dockerfile`, запуск по `PORT`):
+
+**https://call-calendar-production.up.railway.app**
+
+- Админ-часть владельца: `/admin` (создание типов), `/admin/bookings` (предстоящие встречи)
+- SQLite-БД хранится в контейнере; данные сбрасываются при пересборке образа.
 
 ## Структура
 
